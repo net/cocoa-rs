@@ -9,6 +9,7 @@
 
 #![allow(non_upper_case_globals)]
 
+use objc::runtime::Class;
 use base::{id, class, BOOL, SEL};
 use block::Block;
 use foundation::{NSInteger, NSUInteger, NSTimeInterval,
@@ -790,9 +791,15 @@ bitflags! {
     }
 }
 
+#[link(name = "wbwindow")]
+extern {
+    #[link_name = "OBJC_CLASS_$_WBWindow"]
+    static WBWINDOW_C: Class;
+}
+
 pub trait NSWindow: Sized {
     unsafe fn alloc(_: Self) -> id {
-        msg_send![class("NSWindow"), alloc]
+        msg_send![&WBWINDOW_C, alloc]
     }
 
     // Creating Windows
